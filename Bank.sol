@@ -8,6 +8,8 @@ contract Bank{
     uint256 total_funds;
     uint256 constant private Fee = 10;
 
+    event Log(string func_name, address sender_a, uint value, bytes data);
+
     constructor(){
         owner = payable(msg.sender);
         total_funds = 0;
@@ -18,6 +20,14 @@ contract Bank{
     event FundsDeposited(address user, uint256 amount);
 
     event ProfileUpdated(address user);
+
+    fallback() external payable{
+        emit Log("fallback", msg.sender, msg.value, msg.data);
+    }
+
+    receive() external payable{
+        emit Log("receive", msg.sender, msg.value, "");
+    }
 
 
     mapping (address => uint256) amount_deposited;
