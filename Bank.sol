@@ -4,12 +4,12 @@ pragma solidity ^0.8.13;
 
 contract Bank{
 
-    address owner;
+    address payable public owner;
     uint256 total_funds;
     uint256 constant private Fee = 10;
 
     constructor(){
-        owner = msg.sender;
+        owner = payable(msg.sender);
         total_funds = 0;
     }
 
@@ -68,10 +68,10 @@ contract Bank{
         return(stored_deets._name, stored_deets._age);
     }
 
-    function deposit_funds(uint256 amount_f) public{
-        amount_deposited[msg.sender] = amount_f;
-        total_funds = total_funds + amount_f;
-        emit FundsDeposited(msg.sender, amount_f);
+    function deposit() public payable{
+        amount_deposited[msg.sender] = msg.value;
+        total_funds = total_funds + msg.value;
+        emit FundsDeposited(msg.sender, msg.value);
     }
 
     function withdraw_funds(uint256 w_funds) public onlyOwner dep_before{
